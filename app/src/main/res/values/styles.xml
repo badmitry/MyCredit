@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="text">text
+        <item name="android:textColor">@color/vtb_blue</item>
+    </style>
+
+    <style name="title" parent="@style/text">
+        <item name="android:textSize">18sp</item>
+    </style>
+
+    <style name="Button" parent="ThemeOverlay.AppCompat">
+        <item name="android:backgroundTint">@color/vtb_light_blue</item>
+        <item name="android:layout_gravity">center</item>
+    </style>
+
+    <style name="AppBarTheme" parent="ThemeOverlay.MaterialComponents.ActionBar">
+        <item name="android:background">@color/vtb_white</item>
+        <item name="titleTextAppearance">@style/title</item>
+        <item name="layout_collapseMode">pin</item>
+    </style>
+</resources>
