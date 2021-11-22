@@ -26,8 +26,7 @@
         <item name="boxStrokeErrorColor">@color/vtb_red</item>
         <item name="counterOverflowTextColor">@color/vtb_red</item>
         <item name="errorTextColor">@color/vtb_red</item>
-        <item name="android:maxLength">60</item>
-        <item name="android:textColorHint">@color/vtb_light_blue</item>
+        <item name="android:maxLength">30</item>
         <item name="hintTextColor">@color/vtb_light_blue</item>
         <item name="boxStrokeColor">@color/vtb_light_blue</item>
         <item name="errorIconDrawable">@null</item>
