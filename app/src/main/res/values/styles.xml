@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <style name="text">text
         <item name="android:textColor">@color/vtb_blue</item>
     </style>
@@ -17,5 +18,26 @@
         <item name="android:background">@color/vtb_white</item>
         <item name="titleTextAppearance">@style/title</item>
         <item name="layout_collapseMode">pin</item>
+    </style>
+
+    <style name="TextInputEditTextStile" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="android:maxLines">1</item>
+        <item name="android:singleLine">true</item>
+        <item name="boxStrokeErrorColor">@color/vtb_red</item>
+        <item name="counterOverflowTextColor">@color/vtb_red</item>
+        <item name="errorTextColor">@color/vtb_red</item>
+        <item name="android:maxLength">60</item>
+        <item name="android:textColorHint">@color/vtb_light_blue</item>
+        <item name="hintTextColor">@color/vtb_light_blue</item>
+        <item name="boxStrokeColor">@color/vtb_light_blue</item>
+        <item name="errorIconDrawable">@null</item>
+        <item name="helperTextEnabled">true</item>
+        <item name="hintEnabled">true</item>
+        <item name="android:paddingStart">@dimen/dp_20</item>
+        <item name="android:paddingEnd">@dimen/dp_20</item>
+    </style>
+
+    <style name="TextInputEditTextStile.password">
+        <item name="passwordToggleEnabled">true</item>
     </style>
 </resources>

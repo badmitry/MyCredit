@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">MyCredit</string>
     <string name="hello">Hello World!</string>
+    <string name="signing">Войти</string>
+    <string name="enter_password">Введите пароль</string>
+    <string name="enter_login">Введите логин</string>
 </resources>

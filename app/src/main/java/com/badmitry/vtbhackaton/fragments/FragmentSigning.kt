@@ -36,8 +36,8 @@ class FragmentSigning : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.btnOption.setOnClickListener { viewModel.replaceFragment(Screens.MAIN) }
-        binding.btnPortfolioGraph.setOnClickListener { viewModel.replaceFragment(Screens.MAIN) }
+//        binding.btnOption.setOnClickListener { viewModel.replaceFragment(Screens.MAIN) }
+//        binding.btnPortfolioGraph.setOnClickListener { viewModel.replaceFragment(Screens.MAIN) }
     }
 
     private fun initViewModel() {

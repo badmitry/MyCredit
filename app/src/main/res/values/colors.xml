@@ -13,5 +13,6 @@
     <color name="vtb_grey">#696969</color>
     <color name="vtb_light_blue">#0033ff</color>
     <color name="vtb_light_grey">#D3D3D3</color>
+    <color name="vtb_red">#FF0000</color>
 
 </resources>
