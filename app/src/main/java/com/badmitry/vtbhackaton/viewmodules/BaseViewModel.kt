@@ -7,6 +7,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import com.badmitry.domain.entities.EventArgs
 import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.disposables.Disposable
 
 open class BaseViewModel(app: Application) : AndroidViewModel(app) {
 
@@ -23,6 +24,18 @@ open class BaseViewModel(app: Application) : AndroidViewModel(app) {
     override fun onCleared() {
         compositeDisposables.clear()
         super.onCleared()
+    }
+
+    protected fun onSubscribe(@Suppress("UNUSED_PARAMETER") disposable: Disposable) {
+        progressData.value = EventArgs(true)
+    }
+
+    protected fun onFinally() {
+        progressData.value = EventArgs(false)
+    }
+
+    protected fun onError(e: Throwable) {
+        errorData.value = EventArgs(e)
     }
 
     fun observe(

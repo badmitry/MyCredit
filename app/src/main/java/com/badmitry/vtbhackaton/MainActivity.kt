@@ -1,7 +1,7 @@
 package com.badmitry.vtbhackaton
 
+import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
@@ -16,6 +16,7 @@ import dagger.android.support.DaggerAppCompatActivity
 import ru.terrakok.cicerone.android.support.SupportAppNavigator
 import javax.inject.Inject
 
+
 class MainActivity : DaggerAppCompatActivity(), OnErrorView, OnProgressView {
 
     private lateinit var binding: ActivityMainBinding
@@ -29,6 +30,21 @@ class MainActivity : DaggerAppCompatActivity(), OnErrorView, OnProgressView {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
         initViewModel()
         setNavigator()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        val uri: Uri? = intent.data
+        if (uri != null && uri.toString().startsWith("https://badmitry.com")) {
+            // use the parameter your API exposes for the code (mostly it's "code")
+            val code: String? = uri.getQueryParameter("code")
+            if (code != null) {
+                Toast.makeText(this, uri.getQueryParameter("code"), Toast.LENGTH_LONG)
+                viewModel.replaceFragment(Screens.SIGNING)
+            } else if (uri.getQueryParameter("error") != null) {
+                Toast.makeText(this, uri.getQueryParameter("error"), Toast.LENGTH_LONG)
+            }
+        }
         if (supportFragmentManager.findFragmentById(binding.container.id) == null) {
             viewModel.replaceFragment(Screens.SIGNING)
         }

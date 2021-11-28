@@ -5,6 +5,7 @@ import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Build
+import com.badmitry.domain.repositories.INetworkChecker
 import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
 import java.io.IOException

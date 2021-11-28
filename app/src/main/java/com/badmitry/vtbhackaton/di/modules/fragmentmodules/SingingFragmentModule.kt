@@ -12,5 +12,5 @@ interface SingingFragmentModule {
     @Binds
     @IntoMap
     @ViewModelKey(FragmentSigningViewModel::class)
-    fun mainViewModel(fragmentViewModel: FragmentSigningViewModel): ViewModel
+    fun signingViewModel(fragmentViewModel: FragmentSigningViewModel): ViewModel
 }

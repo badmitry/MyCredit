@@ -2,9 +2,7 @@ package com.badmitry.vtbhackaton.di
 
 import android.app.Application
 import com.badmitry.vtbhackaton.App
-import com.badmitry.vtbhackaton.di.modules.ComponentsModule
-import com.badmitry.vtbhackaton.di.modules.NavigationModule
-import com.badmitry.vtbhackaton.di.modules.ViewModelFactoryModule
+import com.badmitry.vtbhackaton.di.modules.*
 import dagger.BindsInstance
 import dagger.Component
 import dagger.android.AndroidInjector
@@ -17,7 +15,10 @@ import javax.inject.Singleton
         AndroidSupportInjectionModule::class,
         ViewModelFactoryModule::class,
         NavigationModule::class,
-        ComponentsModule::class
+        ComponentsModule::class,
+        SchedulersModule::class,
+        NetworkModule::class,
+        InteractorsModule::class
     ]
 )
 interface AppComponent : AndroidInjector<App> {

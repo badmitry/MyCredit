@@ -1,4 +1,4 @@
-package com.badmitry.data
+package com.badmitry.domain.repositories
 
 import io.reactivex.Single
 
