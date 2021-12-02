@@ -1,30 +1,41 @@
 package com.badmitry.vtbhackaton.fragments
 
-import android.location.Address
+import android.Manifest
+import android.annotation.SuppressLint
+import android.content.Context
+import android.content.pm.PackageManager
+import android.location.Location
+import android.location.LocationManager
+import android.os.Build
 import android.os.Bundle
+import android.os.Handler
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
+import com.badmitry.domain.entities.Bbox
+import com.badmitry.domain.entities.yandexpartitions.Partitions
+import com.badmitry.domain.entities.yandexpartitions.YandexResponse
 import com.badmitry.vtbhackaton.MainActivity
 import com.badmitry.vtbhackaton.R
 import com.badmitry.vtbhackaton.databinding.FragmentSelectPartitionBinding
 import com.badmitry.vtbhackaton.viewmodules.FragmentSelectPartitionViewModel
 import com.yandex.mapkit.MapKitFactory
 import com.yandex.mapkit.geometry.Point
-import com.yandex.mapkit.map.CameraPosition
-import com.yandex.mapkit.map.MapType
+import com.yandex.mapkit.map.*
+import com.yandex.runtime.image.ImageProvider
 import javax.inject.Inject
-import android.location.Geocoder
-import java.io.IOException
-import java.util.*
 
 
-class FragmentSelectPartition : BaseFragment() {
+class FragmentSelectPartition : BaseFragment(), MapObjectTapListener {
     private lateinit var binding: FragmentSelectPartitionBinding
     private lateinit var viewModel: FragmentSelectPartitionViewModel
-    private val CAMERA_TARGET: Point = Point(59.952, 30.318)
-    private val MAX_ZOOM = 30
+    private val CAMERA_TARGET: Point = Point(55.751, 37.619)
+    private val MIN_ZOOM = 10F
+    private val handler = Handler()
+    private val BANK_CATEGORIES = "banks"
+    private var currentCameraPosition: CameraPosition? = null
 
     @Inject
     lateinit var vmFactory: ViewModelProvider.Factory
@@ -43,32 +54,52 @@ class FragmentSelectPartition : BaseFragment() {
         return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        binding.yandexMap.map.move(CameraPosition(CAMERA_TARGET, 15f, 0f, 0f))
-        binding.yandexMap.map.setMapType(MapType.VECTOR_MAP)
-//        binding.yandexMap.map.addTapListener {
-//            val sldkfjkd = it.geoObject.attributionMap.keys.size
-//            return@addTapListener sldkfjkd
-//        }
+    private val cameraListener = CameraListener { map, cameraPosition, cameraUpdateReason, b ->
+        viewModel.saveCurrentPosition(cameraPosition)
+        if (cameraPosition.zoom < MIN_ZOOM) {
+            binding.yandexMap.map.move(
+                CameraPosition(
+                    cameraPosition.target,
+                    MIN_ZOOM,
+                    cameraPosition.azimuth,
+                    cameraPosition.tilt
+                )
+            )
+        }
+        handler.removeCallbacks(requestPartitionRunnable)
+        handler.postDelayed(requestPartitionRunnable, 1000)
     }
 
-    private fun getCity(latitude: Double, longitude: Double): String? {
-        val geocoder = Geocoder(requireContext(), Locale.getDefault())
-        var city: String? = null
-        try {
-            val addresses: MutableList<Address>? = geocoder.getFromLocation(latitude, longitude, 1)
-            if (addresses != null) {
-                val returnedAddress: Address = addresses[0]
-                city = returnedAddress.adminArea
-            } else {
-                city = "Error"
-            }
-        } catch (e: IOException) {
-            e.printStackTrace()
-            city = "Error"
+    private val requestPartitionRunnable = Runnable {
+        kotlin.run {
+            val region = binding.yandexMap.map.visibleRegion
+            val bbox = Bbox(
+                region.bottomLeft.longitude.toString(),
+                region.bottomLeft.latitude.toString(),
+                region.topRight.longitude.toString(),
+                region.topRight.latitude.toString()
+            )
+            Log.e(
+                "!!!",
+                bbox.getBbox()
+            )
+            viewModel.requestPartitions(bbox)
         }
-        return city
+    }
+
+    @SuppressLint("ServiceCast")
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        initMap()
+        binding.btnNavigation.setOnClickListener {
+            initMap()
+        }
+        binding.btnMinus.setOnClickListener {
+            initMap(-1)
+        }
+        binding.btnPlus.setOnClickListener {
+            initMap(1)
+        }
     }
 
     override fun onStart() {
@@ -83,17 +114,121 @@ class FragmentSelectPartition : BaseFragment() {
         binding.yandexMap.onStop()
     }
 
+    private fun initMap(zoomChange: Int? = null) {
+        currentCameraPosition?.let {
+            zoomChange?.let { zoom ->
+                binding.yandexMap.map.move(
+                    CameraPosition(
+                        it.target,
+                        it.zoom + zoom,
+                        it.azimuth,
+                        it.tilt
+                    )
+                )
+            } ?: binding.yandexMap.map.move(CameraPosition(it.target, it.zoom, 0f, it.tilt))
+        } ?: run {
+            val locationManager: LocationManager? =
+                requireActivity().getSystemService(Context.LOCATION_SERVICE) as LocationManager?
+            val location = locationManager?.let { getLastBestLocation(it) }
+            location?.let {
+                viewModel.saveCurrentLocation(location)
+                binding.yandexMap.map.move(
+                    CameraPosition(
+                        Point(location.latitude, location.longitude),
+                        15f,
+                        0f,
+                        0f
+                    )
+                )
+            } ?: binding.yandexMap.map.move(CameraPosition(CAMERA_TARGET, 15f, 0f, 0f))
+        }
+        binding.yandexMap.map.setMapType(MapType.VECTOR_MAP)
+        binding.yandexMap.map.addCameraListener(cameraListener)
+    }
+
     private fun initViewModel() {
         viewModel = ViewModelProvider(this, vmFactory)[FragmentSelectPartitionViewModel::class.java]
         viewModel.observe(this, ::onProgress, ::onError)
-        viewModel.liveData.observe(this, ::onDataChanged)
+        viewModel.yandexResponseLiveData.observe(this, ::onPartitionsDownloaded)
+        viewModel.currentPositionLiveData.observe(this, ::onCurrentPositionChanged)
+        viewModel.currentLocationLiveData.observe(this, ::onCurrentLocationChanged)
+    }
+
+    private fun onCurrentLocationChanged(location: Location?) {
+        Log.e("!!!", "onCurrentLocationChanged $location")
+        location?.let {
+            val point = Point(it.latitude, it.longitude)
+            val pointCollection = binding.yandexMap.map.mapObjects.addCollection()
+            pointCollection.addPlacemark(
+                point,
+                ImageProvider.fromResource(requireContext(), R.drawable.m_i_point)
+            )
+        }
+    }
+
+    private fun onCurrentPositionChanged(cameraPosition: CameraPosition) {
+        currentCameraPosition = cameraPosition
     }
 
     override fun setToolbar() {
         (requireActivity() as MainActivity).initToolbar(R.string.app_name, false)
     }
 
-    private fun onDataChanged(int: Int) {
+    private fun onPartitionsDownloaded(response: YandexResponse) {
+        val pointCollection = binding.yandexMap.map.mapObjects.addCollection()
+        pointCollection.addTapListener(this)
+        Log.e(
+            "!!!",
+            "${response.features.size}"
+        )
+        response.features.forEach {
+            if (it.properties.companyMetaData.categories[0].clas == BANK_CATEGORIES) {
+                val point = Point(
+                    it.geometry.coordinates[1].toDouble(),
+                    it.geometry.coordinates[0].toDouble()
+                )
+                val placemark = pointCollection.addPlacemark(
+                    point,
+                    ImageProvider.fromResource(requireContext(), R.drawable.vtbmark)
+                )
+                placemark.userData = it
+            }
+        }
+    }
 
+    private fun getLastBestLocation(mLocationManager: LocationManager): Location? {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (
+                requireActivity().checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                && requireActivity().checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED
+            ) {
+                return null
+            }
+        }
+        val locationGPS: Location? =
+            mLocationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER)
+        val locationNet: Location? =
+            mLocationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER)
+        var GPSLocationTime: Long = 0
+        if (null != locationGPS) {
+            GPSLocationTime = locationGPS.getTime()
+        }
+        var NetLocationTime: Long = 0
+        if (null != locationNet) {
+            NetLocationTime = locationNet.getTime()
+        }
+        return if (0 < GPSLocationTime - NetLocationTime) {
+            locationGPS
+        } else {
+            locationNet
+        }
+    }
+
+    override fun onMapObjectTap(p0: MapObject, p1: Point): Boolean {
+        Log.e(
+            "!!!",
+            "onMapObjectTap: ${(p0.userData as Partitions).properties.companyMetaData.hourse.text}"
+        )
+        return true
     }
 }

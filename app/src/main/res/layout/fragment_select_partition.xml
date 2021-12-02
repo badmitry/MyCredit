@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"
@@ -11,6 +12,46 @@
             android:id="@+id/yandex_map"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:apiKey="8ed48b1c-8237-4f35-a5ad-2bdab1c4bb2a"/>
-    </LinearLayout>
+            android:apiKey="8ed48b1c-8237-4f35-a5ad-2bdab1c4bb2a" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_minus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:text="@string/minus"
+            android:textColor="@color/vtb_black"
+            android:textSize="30sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@id/yandex_map"
+            app:layout_constraintEnd_toStartOf="@id/btn_plus"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintStart_toStartOf="@id/yandex_map" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_plus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:text="@string/plus"
+            android:textColor="@color/vtb_black"
+            android:textSize="30sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@id/yandex_map"
+            app:layout_constraintEnd_toEndOf="@id/yandex_map"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintStart_toEndOf="@id/btn_minus" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_navigation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            app:icon="@drawable/ic_navigation"
+            app:iconTint="@color/vtb_black"
+            android:textColor="@color/vtb_black"
+            app:layout_constraintBottom_toBottomOf="@id/yandex_map"
+            app:layout_constraintEnd_toEndOf="@id/yandex_map"
+            android:layout_marginBottom="@dimen/dp_12"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

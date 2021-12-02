@@ -3,10 +3,12 @@ package com.badmitry.vtbhackaton.di.modules
 import android.app.Application
 import com.badmitry.data.AndroidNetworkChecker
 import com.badmitry.data.api.VTBAuthApi
+import com.badmitry.data.api.YandexPartitionsApi
 import com.badmitry.data.repositories.VTBAuthRepositories
+import com.badmitry.data.repositories.YandexPartitionsRepositories
 import com.badmitry.domain.repositories.INetworkChecker
 import com.badmitry.domain.repositories.IVTBAuthRepositories
-import com.badmitry.vtbhackaton.App
+import com.badmitry.domain.repositories.IYandexPartitionsRepositories
 import com.google.gson.FieldNamingPolicy
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
@@ -18,6 +20,7 @@ import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
+import javax.inject.Named
 import javax.inject.Singleton
 
 @Module
@@ -46,7 +49,8 @@ class NetworkModule {
 
     @Provides
     @Singleton
-    fun retrofit(
+    @Named("vtbAuth")
+    fun vtbAuthRetrofit(
         client: OkHttpClient,
         gson: Gson
     ) = Retrofit.Builder()
@@ -59,7 +63,29 @@ class NetworkModule {
 
     @Provides
     @Singleton
-    fun authRepository(api: VTBAuthApi): IVTBAuthRepositories = VTBAuthRepositories(api)
+    @Named("yandex")
+    fun yandexRetrofit(
+        client: OkHttpClient,
+        gson: Gson
+    ) = Retrofit.Builder()
+        .baseUrl("https://search-maps.yandex.ru")
+        .addConverterFactory(GsonConverterFactory.create(gson))
+        .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+        .client(client)
+        .build()
+        .create(YandexPartitionsApi::class.java)
+
+    @Provides
+    @Singleton
+    @Named("vtbAuth")
+    fun authRepository(@Named("vtbAuth") api: VTBAuthApi): IVTBAuthRepositories =
+        VTBAuthRepositories(api)
+
+    @Provides
+    @Singleton
+    @Named("yandex")
+    fun yandexRepository(@Named("yandex") api: YandexPartitionsApi): IYandexPartitionsRepositories =
+        YandexPartitionsRepositories(api)
 
 
 //    @Singleton

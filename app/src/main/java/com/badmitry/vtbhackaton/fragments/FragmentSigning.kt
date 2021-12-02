@@ -1,5 +1,8 @@
 package com.badmitry.vtbhackaton.fragments
 
+import android.Manifest
+import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import android.util.Base64
 import android.util.Log
@@ -24,6 +27,7 @@ class FragmentSigning : BaseFragment() {
 
     private val testLogin = "team21@app.hackaton.bankingapi.ru"
     private val testPassword = "jGW2R1Gi"
+    private val CODE_PERMISSION_LOCATION = 1100
 
     @Inject
     lateinit var vmFactory: ViewModelProvider.Factory
@@ -44,6 +48,21 @@ class FragmentSigning : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (requireActivity().checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) !=
+                PackageManager.PERMISSION_GRANTED &&
+                requireActivity().checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) !=
+                PackageManager.PERMISSION_GRANTED
+            ) {
+                requireActivity().requestPermissions(
+                    arrayOf(
+                        Manifest.permission.ACCESS_FINE_LOCATION,
+                        Manifest.permission.ACCESS_COARSE_LOCATION
+                    ),
+                    CODE_PERMISSION_LOCATION
+                )
+            }
+        }
         binding.btnSigning.setOnClickListener {
 
             Log.e(
