@@ -36,6 +36,7 @@ class FragmentSelectPartition : BaseFragment(), MapObjectTapListener {
     private val handler = Handler()
     private val BANK_CATEGORIES = "banks"
     private var currentCameraPosition: CameraPosition? = null
+    private var userLocation: Location? = null
 
     @Inject
     lateinit var vmFactory: ViewModelProvider.Factory
@@ -91,6 +92,13 @@ class FragmentSelectPartition : BaseFragment(), MapObjectTapListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initMap()
+        initComponent()
+    }
+
+    private fun initComponent() {
+        binding.layoutPartition.btnClose.setOnClickListener{
+            binding.layoutPartition.nsvContainer.visibility = View.GONE
+        }
         binding.btnNavigation.setOnClickListener {
             initMap()
         }
@@ -156,7 +164,12 @@ class FragmentSelectPartition : BaseFragment(), MapObjectTapListener {
 
     private fun onCurrentLocationChanged(location: Location?) {
         Log.e("!!!", "onCurrentLocationChanged $location")
-        location?.let {
+        userLocation = location
+        drawUserLocationMark()
+    }
+
+    private fun drawUserLocationMark() {
+        userLocation?.let {
             val point = Point(it.latitude, it.longitude)
             val pointCollection = binding.yandexMap.map.mapObjects.addCollection()
             pointCollection.addPlacemark(
@@ -175,12 +188,14 @@ class FragmentSelectPartition : BaseFragment(), MapObjectTapListener {
     }
 
     private fun onPartitionsDownloaded(response: YandexResponse) {
+//        binding.yandexMap.map.mapObjects.clear()
         val pointCollection = binding.yandexMap.map.mapObjects.addCollection()
         pointCollection.addTapListener(this)
         Log.e(
             "!!!",
             "${response.features.size}"
         )
+        drawUserLocationMark()
         response.features.forEach {
             if (it.properties.companyMetaData.categories[0].clas == BANK_CATEGORIES) {
                 val point = Point(
@@ -229,6 +244,11 @@ class FragmentSelectPartition : BaseFragment(), MapObjectTapListener {
             "!!!",
             "onMapObjectTap: ${(p0.userData as Partitions).properties.companyMetaData.hourse.text}"
         )
+        (p0.userData as Partitions).properties.let{
+            binding.layoutPartition.tvAddress.text = it.companyMetaData.address
+            binding.layoutPartition.tvHours.text = it.companyMetaData.hourse.text
+            binding.layoutPartition.nsvContainer.visibility = View.VISIBLE
+        }
         return true
     }
 }

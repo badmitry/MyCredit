@@ -11,8 +11,12 @@
         <com.yandex.mapkit.mapview.MapView
             android:id="@+id/yandex_map"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:apiKey="8ed48b1c-8237-4f35-a5ad-2bdab1c4bb2a" />
+            android:layout_height="0dp"
+            android:apiKey="8ed48b1c-8237-4f35-a5ad-2bdab1c4bb2a"
+            app:layout_constraintBottom_toTopOf="@id/layout_partition"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_minus"
@@ -46,12 +50,22 @@
             android:id="@+id/btn_navigation"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/dp_12"
             android:background="@android:color/transparent"
+            android:textColor="@color/vtb_black"
             app:icon="@drawable/ic_navigation"
             app:iconTint="@color/vtb_black"
-            android:textColor="@color/vtb_black"
             app:layout_constraintBottom_toBottomOf="@id/yandex_map"
-            app:layout_constraintEnd_toEndOf="@id/yandex_map"
-            android:layout_marginBottom="@dimen/dp_12"/>
+            app:layout_constraintStart_toStartOf="@id/yandex_map" />
+
+        <include
+            android:id="@+id/layout_partition"
+            layout="@layout/layout_select_partition"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/yandex_map"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
