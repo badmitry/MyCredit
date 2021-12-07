@@ -2,6 +2,7 @@ package com.badmitry.vtbhackaton
 
 import android.net.Uri
 import android.os.Bundle
+import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
@@ -67,6 +68,13 @@ class MainActivity : DaggerAppCompatActivity(), OnErrorView, OnProgressView {
             setHomeButtonEnabled(onBackBtnVisible)
             setDisplayHomeAsUpEnabled(onBackBtnVisible)
         }
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            android.R.id.home -> onBackPressed()
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     override fun onError(arg: EventArgs<Throwable>) {

@@ -2,6 +2,7 @@ package com.badmitry.data.api
 
 import com.badmitry.domain.entities.AuthToken
 import com.badmitry.domain.entities.TokenFailed
+import com.badmitry.domain.entities.User
 import io.reactivex.Single
 import retrofit2.http.*
 
@@ -19,4 +20,9 @@ interface VTBAuthApi {
     fun checkToken(
         @Header("Authorization") token: String
     ): Single<TokenFailed>
+
+    @GET("/api/vtbid/v1/oauth2/me?=")
+    fun getUser(
+        @Header("Authorization") token: String
+    ): Single<User>
 }

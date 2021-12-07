@@ -5,7 +5,6 @@ import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import android.util.Base64
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -64,36 +63,16 @@ class FragmentSigning : BaseFragment() {
             }
         }
         binding.btnSigning.setOnClickListener {
-
-            Log.e(
-                "!!!",
-                getJson("eyJ0eXAiOiJKV1QiLCJraWQiOiJodHRwczovL3Bhc3Nwb3J0LmFwaS52dGIucnUvcGFzc3BvcnQiLCJhbGciOiJFUzI1NiJ9.eyJzdWIiOiJ0ZWFtMjEiLCJtZXRob2QiOiJsb2dpbiIsImlwIjoiMTI3LjAuMC4xIiwiaXNzIjoiaHR0cHM6Ly9wYXNzcG9ydC5hcGkudnRiLnJ1L3Bhc3Nwb3J0IiwiY2hhbm5lbCI6InNlcnZpY2UiLCJub25jZSI6ImNlNTk1ZDU0LWQ4YTQtNDU0Mi1hODZiLTUwNDA4YzY0Y2E4YiIsImF1ZCI6InRlYW0yMUBhcHAuaGFja2F0b24uYmFua2luZ2FwaS5ydSIsImF1dGg6c2VydmljZSI6Im9hdXRoMnRva2VuIiwiYXV0aDptb2R1bGUiOiJvYXV0aDJ0b2tlbiIsInNjb3BlIjoic3ViIiwicmVhbG0iOiIvYjJjL2FwcCIsImV4cCI6MTYzODE5NDkzMywiaWF0IjoxNjM4MTkxMzMzLCJqdGkiOiI5MWNmOWFjZi00Y2JhLTRhNjMtYTQ0OC0yNjQzMmY5MmM4ZDQifQ.wKupO0fUtiBKqB-iq0YDpcTyYpuabzMEmtMoXBMIqaBFw-RnqEEwi6YpmW22QI6rhB83bnvFt3FX9tWuHw6mqg")
-            )
             viewModel.requestAuth(
                 binding.etLogin.text.toString(),
                 binding.etPassword.text.toString()
             )
-//            val intent = Intent(
-//                Intent.ACTION_VIEW,
-//                Uri.parse(
-//                    ServiceGenerator.API_BASE_URL + "/authorize" + "?scope=" +login + "+" + password + "&redirect_uri=" + redirectUri +
-//                        "&state=VA" + "&client_id=" + appClientId + "&response_type=code")
-//            )
-//            startActivity(intent)
-//            val authToken = Credentials.basic(appClientId, appClientSecret)
-//            Log.e("!!!", "authToken: $authToken")
         }
 
         binding.btnTestAccount.setOnClickListener {
             binding.etLogin.setText(testLogin)
             binding.etPassword.setText(testPassword)
         }
-    }
-
-
-    private fun getJson(strEncoded: String): String {
-        val decodedBytes: ByteArray = Base64.decode(strEncoded, Base64.URL_SAFE)
-        return String(decodedBytes)
     }
 
     private fun initViewModel() {
@@ -103,7 +82,7 @@ class FragmentSigning : BaseFragment() {
     }
 
     override fun setToolbar() {
-        (requireActivity() as MainActivity).initToolbar(R.string.app_name, false)
+        (requireActivity() as MainActivity).initToolbar(R.string.signing, false)
     }
 
     private fun onDataChanged(int: Int) {

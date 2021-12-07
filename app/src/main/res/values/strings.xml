@@ -11,4 +11,8 @@
     <string name="adress">Адресс:</string>
     <string name="time_to_work">Время работы:</string>
     <string name="select_partition">Выбрать отделение</string>
+    <string name="hi">Здравствуйте</string>
+    <string name="space">\ \</string>
+    <string name="send_application">Подать новую заявку</string>
+    <string name="my_application">Мои заявки</string>
 </resources>

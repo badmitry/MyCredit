@@ -15,6 +15,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import com.badmitry.domain.entities.Bbox
+import com.badmitry.domain.entities.FragmentData
 import com.badmitry.domain.entities.yandexpartitions.Partitions
 import com.badmitry.domain.entities.yandexpartitions.YandexResponse
 import com.badmitry.vtbhackaton.MainActivity
@@ -184,7 +185,7 @@ class FragmentSelectPartition : BaseFragment(), MapObjectTapListener {
     }
 
     override fun setToolbar() {
-        (requireActivity() as MainActivity).initToolbar(R.string.app_name, false)
+        (requireActivity() as MainActivity).initToolbar(R.string.select_partition, true)
     }
 
     private fun onPartitionsDownloaded(response: YandexResponse) {

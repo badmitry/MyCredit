@@ -4,6 +4,8 @@ import android.app.Application
 import androidx.lifecycle.MutableLiveData
 import com.badmitry.domain.entities.AuthCredentials
 import com.badmitry.domain.entities.AuthToken
+import com.badmitry.domain.entities.FragmentData
+import com.badmitry.domain.entities.User
 import com.badmitry.domain.interactors.VTBAuthInteractor
 import com.badmitry.vtbhackaton.navigation.FragmentScreensProvider
 import com.badmitry.vtbhackaton.navigation.Screens
@@ -16,19 +18,10 @@ class FragmentSigningViewModel @Inject constructor(
     app: Application
 ) : BaseViewModel(app) {
 
-    private val appClientId = "920cb60cce58e560c4463b0c2e2a9970"
-    private val appClientSecret = "157baf586bde3eb6795dd15727107986"
-    private val redirectUri = "https://badmitry.com"
     private val host = "hackaton.bankingapi.ru"
 
-    private val login = "team21@app.hackaton.bankingapi.ru"
-    private val password = "jGW2R1Gi"
-
-    private val login1 = "team1@app.hackaton.bankingapi.ru"
-    private val password1 = "BTLCRBLs"
-
-    fun replaceFragment(screen: Screens) {
-        router.replaceScreen(FragmentScreensProvider(screen))
+    private fun replaceFragment(screen: Screens, params: FragmentData<Any>) {
+        router.replaceScreen(FragmentScreensProvider(screen, params))
     }
 
     fun requestAuth(clientId: String, clientSecret: String) {
@@ -37,8 +30,8 @@ class FragmentSigningViewModel @Inject constructor(
         authInteractor(params, ::onSubscribe, ::onFinally, ::onAuth, ::onError)
     }
 
-    private fun onAuth(authToken: AuthToken) {
-        replaceFragment(Screens.SELECT_PARTITION)
+    private fun onAuth(user: User) {
+        replaceFragment(Screens.MAIN, FragmentData(user))
     }
 
     val liveData = MutableLiveData<Int>()
