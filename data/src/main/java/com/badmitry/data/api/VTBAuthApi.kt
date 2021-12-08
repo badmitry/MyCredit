@@ -3,6 +3,8 @@ package com.badmitry.data.api
 import com.badmitry.domain.entities.AuthToken
 import com.badmitry.domain.entities.TokenFailed
 import com.badmitry.domain.entities.User
+import com.badmitry.domain.entities.vtbcreditrequest.VtbApplicationId
+import com.badmitry.domain.entities.vtbcreditrequest.VtbCreditRequest
 import io.reactivex.Single
 import retrofit2.http.*
 
@@ -25,4 +27,10 @@ interface VTBAuthApi {
     fun getUser(
         @Header("Authorization") token: String
     ): Single<User>
+
+    @POST("/api/rb/mssa/partner/hackathon/v1/applications")
+    fun creditApplication(
+        @Header("Authorization") token: String,
+        @Body vtbCreditRequest: VtbCreditRequest
+    ): Single<VtbApplicationId>
 }

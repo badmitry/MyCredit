@@ -2,6 +2,8 @@ package com.badmitry.vtbhackaton.viewmodules
 
 import android.app.Application
 import androidx.lifecycle.MutableLiveData
+import com.badmitry.data.DataSaver
+import com.badmitry.domain.entities.AuthData
 import com.badmitry.domain.entities.User
 import com.badmitry.vtbhackaton.navigation.FragmentScreensProvider
 import com.badmitry.vtbhackaton.navigation.Screens
@@ -24,9 +26,10 @@ class FragmentMainViewModel @Inject constructor(
 //        authInteractor(params, ::onSubscribe, ::onFinally, ::onAuth, ::onError)
 //    }
 
-    val liveData = MutableLiveData<User>()
+    val liveData = MutableLiveData<AuthData>()
 
-    fun setUser(user: User) {
-        liveData.value = user
+    fun setAuthData(authData: AuthData) {
+        DataSaver.instance.authData = authData
+        liveData.value = authData
     }
 }

@@ -15,12 +15,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import com.badmitry.domain.entities.Bbox
-import com.badmitry.domain.entities.FragmentData
 import com.badmitry.domain.entities.yandexpartitions.Partitions
 import com.badmitry.domain.entities.yandexpartitions.YandexResponse
 import com.badmitry.vtbhackaton.MainActivity
 import com.badmitry.vtbhackaton.R
 import com.badmitry.vtbhackaton.databinding.FragmentSelectPartitionBinding
+import com.badmitry.vtbhackaton.navigation.Screens
 import com.badmitry.vtbhackaton.viewmodules.FragmentSelectPartitionViewModel
 import com.yandex.mapkit.MapKitFactory
 import com.yandex.mapkit.geometry.Point
@@ -108,6 +108,9 @@ class FragmentSelectPartition : BaseFragment(), MapObjectTapListener {
         }
         binding.btnPlus.setOnClickListener {
             initMap(1)
+        }
+        binding.layoutPartition.btnSendApplication.setOnClickListener{
+            viewModel.replaceFragment(Screens.APPLICATION_FIELD)
         }
     }
 

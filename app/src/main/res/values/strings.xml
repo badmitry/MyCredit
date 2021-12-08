@@ -15,4 +15,5 @@
     <string name="space">\ \</string>
     <string name="send_application">Подать новую заявку</string>
     <string name="my_application">Мои заявки</string>
+    <string name="input_application">Заявка на кредит</string>
 </resources>

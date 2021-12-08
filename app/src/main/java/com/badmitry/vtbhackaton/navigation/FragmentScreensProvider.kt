@@ -1,18 +1,20 @@
 package com.badmitry.vtbhackaton.navigation
 
-import com.badmitry.domain.entities.FragmentData
-import com.badmitry.vtbhackaton.fragments.BaseFragment
-import com.badmitry.vtbhackaton.fragments.FragmentMain
-import com.badmitry.vtbhackaton.fragments.FragmentSelectPartition
-import com.badmitry.vtbhackaton.fragments.FragmentSigning
+import com.badmitry.domain.entities.AuthData
+import com.badmitry.vtbhackaton.fragments.*
 import ru.terrakok.cicerone.android.support.SupportAppScreen
 
-class FragmentScreensProvider(private val screen: Screens, private val params: FragmentData<Any>? = null) : SupportAppScreen() {
+class FragmentScreensProvider(private val screen: Screens, private val params: AuthData? = null, private val replace: Boolean = false) : SupportAppScreen() {
     override fun getFragment(): BaseFragment {
-        return when (screen) {
-            Screens.SIGNING -> FragmentSigning()
-            Screens.MAIN -> FragmentMain.createInstance(params)
-            Screens.SELECT_PARTITION -> FragmentSelectPartition()
+        if (replace) {
+            return FragmentMain()
+        } else {
+            return when (screen) {
+                Screens.SIGNING -> FragmentSigning()
+                Screens.MAIN -> FragmentMain.createInstance(params)
+                Screens.SELECT_PARTITION -> FragmentSelectPartition()
+                Screens.APPLICATION_FIELD -> FragmentCreditFields()
+            }
         }
     }
 }

@@ -77,6 +77,11 @@ class MainActivity : DaggerAppCompatActivity(), OnErrorView, OnProgressView {
         return super.onOptionsItemSelected(item)
     }
 
+    override fun onBackPressed() {
+        super.onBackPressed()
+        onProgress(EventArgs(false))
+    }
+
     override fun onError(arg: EventArgs<Throwable>) {
         Toast.makeText(this, arg.args.message, Toast.LENGTH_LONG).show()
     }

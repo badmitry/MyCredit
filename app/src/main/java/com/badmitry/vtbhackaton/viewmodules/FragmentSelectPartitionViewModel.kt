@@ -20,7 +20,7 @@ class FragmentSelectPartitionViewModel @Inject constructor(
 ) : BaseViewModel(app) {
 
     fun replaceFragment(screen: Screens) {
-        router.replaceScreen(FragmentScreensProvider(screen))
+        router.navigateTo(FragmentScreensProvider(screen))
     }
 
     fun requestPartitions(bbox: Bbox) {
@@ -43,4 +43,9 @@ class FragmentSelectPartitionViewModel @Inject constructor(
     val yandexResponseLiveData = MutableLiveData<YandexResponse>()
     val currentPositionLiveData = MutableLiveData<CameraPosition>()
     val currentLocationLiveData = MutableLiveData<Location>()
+
+    override fun onCleared() {
+        super.onCleared()
+
+    }
 }

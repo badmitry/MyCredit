@@ -2,13 +2,12 @@ package com.badmitry.vtbhackaton.fragments
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
-import com.badmitry.domain.entities.FragmentData
-import com.badmitry.domain.entities.User
+import com.badmitry.data.DataSaver
+import com.badmitry.domain.entities.AuthData
 import com.badmitry.vtbhackaton.MainActivity
 import com.badmitry.vtbhackaton.R
 import com.badmitry.vtbhackaton.databinding.FragmentMainBinding
@@ -19,10 +18,9 @@ import javax.inject.Inject
 
 class FragmentMain : BaseFragment() {
 
-    private val USER = "user"
+    private val AUTH_DATA = "AuthData"
     private lateinit var binding: FragmentMainBinding
     private lateinit var viewModel: FragmentMainViewModel
-    private val handler = Handler()
 
     @Inject
     lateinit var vmFactory: ViewModelProvider.Factory
@@ -48,8 +46,8 @@ class FragmentMain : BaseFragment() {
     }
 
     private fun initComponent() {
-        arguments?.getSerializable(USER)?.let {
-            viewModel.setUser(it as User)
+        arguments?.getSerializable(AUTH_DATA)?.let {
+            viewModel.setAuthData(it as AuthData)
         }
         binding.btnSendApplication.setOnClickListener {
             viewModel.navigateFragment(Screens.SELECT_PARTITION)
@@ -69,8 +67,8 @@ class FragmentMain : BaseFragment() {
         viewModel.liveData.observe(this, ::onSetUser)
     }
 
-    private fun onSetUser(user: User) {
-        binding.user = user
+    private fun onSetUser(authData: AuthData) {
+        binding.user = authData.user
     }
 
     override fun setToolbar() {
@@ -78,13 +76,11 @@ class FragmentMain : BaseFragment() {
     }
 
     companion object {
-        fun createInstance(data: FragmentData<Any>?): FragmentMain {
+        fun createInstance(data: AuthData?): FragmentMain {
             return FragmentMain().apply {
                 data?.let {
-                    if (it.data is User) {
-                        arguments = Bundle().apply {
-                            putSerializable(USER, it.data as User)
-                        }
+                    arguments = Bundle().apply {
+                        putSerializable(AUTH_DATA, it)
                     }
                 }
             }

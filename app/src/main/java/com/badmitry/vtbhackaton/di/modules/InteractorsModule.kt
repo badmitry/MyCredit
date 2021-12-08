@@ -1,6 +1,7 @@
 package com.badmitry.vtbhackaton.di.modules
 
 import com.badmitry.domain.interactors.VTBAuthInteractor
+import com.badmitry.domain.interactors.VTBCreditInteractor
 import com.badmitry.domain.interactors.YandexPartitionsInteractor
 import com.badmitry.domain.repositories.INetworkChecker
 import com.badmitry.domain.repositories.IVTBAuthRepositories
@@ -23,6 +24,16 @@ class InteractorsModule {
         @Named("MainScheduler") postScheduler: Scheduler
     ): VTBAuthInteractor =
         VTBAuthInteractor(vtbAuthRepositories, networkChecker, scheduler, postScheduler)
+
+    @Singleton
+    @Provides
+    fun vtbCreditInteractor(
+        @Named("vtbAuth") vtbAuthRepositories: IVTBAuthRepositories,
+        networkChecker: INetworkChecker,
+        @Named("IoScheduler") scheduler: Scheduler,
+        @Named("MainScheduler") postScheduler: Scheduler
+    ): VTBCreditInteractor =
+        VTBCreditInteractor(vtbAuthRepositories, networkChecker, scheduler, postScheduler)
 
     @Singleton
     @Provides

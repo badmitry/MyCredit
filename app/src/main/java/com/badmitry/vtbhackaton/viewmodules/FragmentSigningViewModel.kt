@@ -3,8 +3,7 @@ package com.badmitry.vtbhackaton.viewmodules
 import android.app.Application
 import androidx.lifecycle.MutableLiveData
 import com.badmitry.domain.entities.AuthCredentials
-import com.badmitry.domain.entities.AuthToken
-import com.badmitry.domain.entities.FragmentData
+import com.badmitry.domain.entities.AuthData
 import com.badmitry.domain.entities.User
 import com.badmitry.domain.interactors.VTBAuthInteractor
 import com.badmitry.vtbhackaton.navigation.FragmentScreensProvider
@@ -20,7 +19,7 @@ class FragmentSigningViewModel @Inject constructor(
 
     private val host = "hackaton.bankingapi.ru"
 
-    private fun replaceFragment(screen: Screens, params: FragmentData<Any>) {
+    private fun replaceFragment(screen: Screens, params: AuthData) {
         router.replaceScreen(FragmentScreensProvider(screen, params))
     }
 
@@ -30,8 +29,8 @@ class FragmentSigningViewModel @Inject constructor(
         authInteractor(params, ::onSubscribe, ::onFinally, ::onAuth, ::onError)
     }
 
-    private fun onAuth(user: User) {
-        replaceFragment(Screens.MAIN, FragmentData(user))
+    private fun onAuth(data: AuthData) {
+        replaceFragment(Screens.MAIN, data)
     }
 
     val liveData = MutableLiveData<Int>()
