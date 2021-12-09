@@ -13,7 +13,26 @@
     <string name="select_partition">Выбрать отделение</string>
     <string name="hi">Здравствуйте</string>
     <string name="space">\ \</string>
-    <string name="send_application">Подать новую заявку</string>
+    <string name="send_new_application">Подать новую заявку</string>
     <string name="my_application">Мои заявки</string>
     <string name="input_application">Заявка на кредит</string>
+    <string name="send_application">Подать заявку</string>
+    <string name="selected_partition">Выбранное отделение:</string>
+    <string name="surname">Фамилия</string>
+    <string name="name">Имя</string>
+    <string name="patronymic">Отчество</string>
+    <string name="gender">Пол</string>
+    <string name="birth_place">Место рождения</string>
+    <string name="birth_date">Дата рождения</string>
+    <string name="marital_status">Семейное положение</string>
+    <string name="mobile_phone">Мобильный телефон</string>
+    <string name="email">Электронная почта</string>
+    <string name="address_name">Адрес</string>
+    <string name="snils">СНИЛС</string>
+    <string name="inn">ИНН</string>
+    <string name="rf_passport">Паспорт РФ</string>
+    <string name="issue_date">Дата выдачи</string>
+    <string name="department_doc">Кем выдан</string>
+    <string name="credit_sum">Сумма кредита</string>
+    <string name="credit_period">Период кредита (в месяцах)</string>
 </resources>

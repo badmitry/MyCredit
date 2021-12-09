@@ -1,12 +1,14 @@
 package com.badmitry.vtbhackaton.viewmodules
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import com.badmitry.data.DataSaver
 import com.badmitry.domain.entities.AuthCredentials
 import com.badmitry.domain.entities.AuthData
 import com.badmitry.domain.entities.User
 import com.badmitry.domain.entities.vtbcreditrequest.VtbApplicationId
+import com.badmitry.domain.entities.yandexpartitions.Partitions
 import com.badmitry.domain.interactors.VTBAuthInteractor
 import com.badmitry.domain.interactors.VTBCreditInteractor
 import com.badmitry.vtbhackaton.fragments.FragmentMain
@@ -23,6 +25,9 @@ class FragmentCreditViewModel @Inject constructor(
 
     private val host = "hackaton.bankingapi.ru"
 
+    val liveData = MutableLiveData<Int>()
+    val partitionLiveData = MutableLiveData<Partitions>()
+
     private fun backToMainFragment() {
         DataSaver.instance.authData?.let{
             router.backTo(null)
@@ -30,7 +35,7 @@ class FragmentCreditViewModel @Inject constructor(
     }
 
     private fun onAuth(id: VtbApplicationId) {
-        DataSaver.instance
+        Log.e("!!!", "onAuth: ${id.applicationId}")
         backToMainFragment()
     }
 
@@ -41,5 +46,7 @@ class FragmentCreditViewModel @Inject constructor(
         }
     }
 
-    val liveData = MutableLiveData<Int>()
+    fun getPartition() {
+        partitionLiveData.value = DataSaver.instance.partitions
+    }
 }

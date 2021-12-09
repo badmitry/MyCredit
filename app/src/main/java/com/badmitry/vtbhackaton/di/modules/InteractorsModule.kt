@@ -1,9 +1,11 @@
 package com.badmitry.vtbhackaton.di.modules
 
+import com.badmitry.domain.entities.vtbcreditrequest.VtbApplicationId
 import com.badmitry.domain.interactors.VTBAuthInteractor
 import com.badmitry.domain.interactors.VTBCreditInteractor
 import com.badmitry.domain.interactors.YandexPartitionsInteractor
 import com.badmitry.domain.repositories.INetworkChecker
+import com.badmitry.domain.repositories.ISaverRepositories
 import com.badmitry.domain.repositories.IVTBAuthRepositories
 import com.badmitry.domain.repositories.IYandexPartitionsRepositories
 import dagger.Module
@@ -29,11 +31,12 @@ class InteractorsModule {
     @Provides
     fun vtbCreditInteractor(
         @Named("vtbAuth") vtbAuthRepositories: IVTBAuthRepositories,
+        saverApplicationId: ISaverRepositories,
         networkChecker: INetworkChecker,
         @Named("IoScheduler") scheduler: Scheduler,
         @Named("MainScheduler") postScheduler: Scheduler
     ): VTBCreditInteractor =
-        VTBCreditInteractor(vtbAuthRepositories, networkChecker, scheduler, postScheduler)
+        VTBCreditInteractor(vtbAuthRepositories, saverApplicationId, networkChecker, scheduler, postScheduler)
 
     @Singleton
     @Provides

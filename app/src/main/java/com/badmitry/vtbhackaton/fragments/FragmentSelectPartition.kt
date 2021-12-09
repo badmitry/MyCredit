@@ -192,7 +192,6 @@ class FragmentSelectPartition : BaseFragment(), MapObjectTapListener {
     }
 
     private fun onPartitionsDownloaded(response: YandexResponse) {
-//        binding.yandexMap.map.mapObjects.clear()
         val pointCollection = binding.yandexMap.map.mapObjects.addCollection()
         pointCollection.addTapListener(this)
         Log.e(
@@ -249,6 +248,7 @@ class FragmentSelectPartition : BaseFragment(), MapObjectTapListener {
             "onMapObjectTap: ${(p0.userData as Partitions).properties.companyMetaData.hourse.text}"
         )
         (p0.userData as Partitions).properties.let{
+            viewModel.saveSelectPartition(p0.userData as Partitions)
             binding.layoutPartition.tvAddress.text = it.companyMetaData.address
             binding.layoutPartition.tvHours.text = it.companyMetaData.hourse.text
             binding.layoutPartition.nsvContainer.visibility = View.VISIBLE

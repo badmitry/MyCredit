@@ -43,6 +43,7 @@ class FragmentMain : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initComponent()
+        viewModel.getApplicationId()
     }
 
     private fun initComponent() {
@@ -53,6 +54,7 @@ class FragmentMain : BaseFragment() {
             viewModel.navigateFragment(Screens.SELECT_PARTITION)
         }
         binding.cvApplications.setOnClickListener {
+            viewModel.getApplicationId()
             if (binding.rvApplications.visibility == View.VISIBLE) {
                 binding.rvApplications.visibility = View.GONE
             } else {

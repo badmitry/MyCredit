@@ -18,7 +18,8 @@ import javax.inject.Singleton
         ComponentsModule::class,
         SchedulersModule::class,
         NetworkModule::class,
-        InteractorsModule::class
+        InteractorsModule::class,
+        DatabaseModule::class
     ]
 )
 interface AppComponent : AndroidInjector<App> {

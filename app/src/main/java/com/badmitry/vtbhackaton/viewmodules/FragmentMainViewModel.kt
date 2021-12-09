@@ -1,18 +1,24 @@
 package com.badmitry.vtbhackaton.viewmodules
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import com.badmitry.data.DataSaver
 import com.badmitry.domain.entities.AuthData
-import com.badmitry.domain.entities.User
+import com.badmitry.domain.entities.vtbcreditrequest.VtbApplicationId
+import com.badmitry.domain.repositories.ISaverRepositories
 import com.badmitry.vtbhackaton.navigation.FragmentScreensProvider
 import com.badmitry.vtbhackaton.navigation.Screens
+import io.reactivex.Scheduler
 import ru.terrakok.cicerone.Router
 import javax.inject.Inject
+import javax.inject.Named
 
 class FragmentMainViewModel @Inject constructor(
     private val router: Router,
-//    private val authInteractor: VTBAuthInteractor,
+    private val dbRepositories: ISaverRepositories,
+    @param:Named("IoScheduler") private val scheduler: Scheduler,
+    @param:Named("MainScheduler") private val postScheduler: Scheduler,
     app: Application
 ) : BaseViewModel(app) {
 
@@ -20,13 +26,18 @@ class FragmentMainViewModel @Inject constructor(
         router.navigateTo(FragmentScreensProvider(screen))
     }
 
-//    fun requestAuth(clientId: String, clientSecret: String) {
-//        val authCredentials = AuthCredentials("client_credentials", clientId, clientSecret, host)
-//        val params = VTBAuthInteractor.Params(authCredentials)
-//        authInteractor(params, ::onSubscribe, ::onFinally, ::onAuth, ::onError)
-//    }
-
     val liveData = MutableLiveData<AuthData>()
+
+    fun getApplicationId() {
+        dbRepositories.getApplicationId().subscribeOn(scheduler).observeOn(postScheduler)
+            .subscribe { it ->
+                onSuccess(it)
+            }
+    }
+
+    private fun onSuccess(list: List<VtbApplicationId>) {
+        Log.e("!!!", "onSuccess: ${list.size}")
+    }
 
     fun setAuthData(authData: AuthData) {
         DataSaver.instance.authData = authData

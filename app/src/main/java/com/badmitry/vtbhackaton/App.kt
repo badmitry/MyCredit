@@ -1,5 +1,6 @@
 package com.badmitry.vtbhackaton
 
+import com.badmitry.data.db.AppDatabase
 import com.badmitry.vtbhackaton.di.DaggerAppComponent
 import com.yandex.mapkit.MapKitFactory
 import dagger.android.DaggerApplication
@@ -16,5 +17,6 @@ class App : DaggerApplication() {
         super.onCreate()
         MapKitFactory.setApiKey(MAPKIT_API_KEY)
         MapKitFactory.initialize(this)
+        AppDatabase.createInstance(this)
     }
 }
