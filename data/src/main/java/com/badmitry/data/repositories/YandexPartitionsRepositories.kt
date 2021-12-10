@@ -12,4 +12,8 @@ class YandexPartitionsRepositories(private val api: YandexPartitionsApi) :
     override fun getVtbPartitions(bbox: Bbox): Single<YandexResponse> {
         return api.getVtbPartitions(bbox.getBbox())
     }
+
+    override fun getSberPartitions(bbox: Bbox): Single<YandexResponse> {
+        return api.getSberPartitions(bbox.getBbox())
+    }
 }

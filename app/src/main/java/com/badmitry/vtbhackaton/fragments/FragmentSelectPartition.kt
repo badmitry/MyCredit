@@ -14,6 +14,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
+import com.badmitry.domain.entities.Banks
 import com.badmitry.domain.entities.Bbox
 import com.badmitry.domain.entities.yandexpartitions.Partitions
 import com.badmitry.domain.entities.yandexpartitions.YandexResponse
@@ -97,7 +98,7 @@ class FragmentSelectPartition : BaseFragment(), MapObjectTapListener {
     }
 
     private fun initComponent() {
-        binding.layoutPartition.btnClose.setOnClickListener{
+        binding.layoutPartition.btnClose.setOnClickListener {
             binding.layoutPartition.nsvContainer.visibility = View.GONE
         }
         binding.btnNavigation.setOnClickListener {
@@ -109,7 +110,7 @@ class FragmentSelectPartition : BaseFragment(), MapObjectTapListener {
         binding.btnPlus.setOnClickListener {
             initMap(1)
         }
-        binding.layoutPartition.btnSendApplication.setOnClickListener{
+        binding.layoutPartition.btnSendApplication.setOnClickListener {
             viewModel.replaceFragment(Screens.APPLICATION_FIELD)
         }
     }
@@ -140,9 +141,11 @@ class FragmentSelectPartition : BaseFragment(), MapObjectTapListener {
             } ?: binding.yandexMap.map.move(CameraPosition(it.target, it.zoom, 0f, it.tilt))
         } ?: run {
             val locationManager: LocationManager? =
-                requireActivity().getSystemService(Context.LOCATION_SERVICE) as LocationManager?
+                requireActivity().applicationContext.getSystemService(Context.LOCATION_SERVICE) as LocationManager?
             val location = locationManager?.let { getLastBestLocation(it) }
+            Log.e("!!!", "location: $location")
             location?.let {
+                Log.e("!!!", "location1: $location")
                 viewModel.saveCurrentLocation(location)
                 binding.yandexMap.map.move(
                     CameraPosition(
@@ -191,25 +194,25 @@ class FragmentSelectPartition : BaseFragment(), MapObjectTapListener {
         (requireActivity() as MainActivity).initToolbar(R.string.select_partition, true)
     }
 
-    private fun onPartitionsDownloaded(response: YandexResponse) {
-        val pointCollection = binding.yandexMap.map.mapObjects.addCollection()
-        pointCollection.addTapListener(this)
-        Log.e(
-            "!!!",
-            "${response.features.size}"
-        )
-        drawUserLocationMark()
-        response.features.forEach {
-            if (it.properties.companyMetaData.categories[0].clas == BANK_CATEGORIES) {
-                val point = Point(
-                    it.geometry.coordinates[1].toDouble(),
-                    it.geometry.coordinates[0].toDouble()
-                )
-                val placemark = pointCollection.addPlacemark(
-                    point,
-                    ImageProvider.fromResource(requireContext(), R.drawable.vtbmark)
-                )
-                placemark.userData = it
+    private fun onPartitionsDownloaded(responses: List<YandexResponse>) {
+        responses.forEach { response ->
+            val pointCollection = binding.yandexMap.map.mapObjects.addCollection()
+            pointCollection.addTapListener(this)
+            drawUserLocationMark()
+            response.features.forEach {
+                if (it.properties.companyMetaData.categories[0].clas == BANK_CATEGORIES) {
+                    val point = Point(
+                        it.geometry.coordinates[1].toDouble(),
+                        it.geometry.coordinates[0].toDouble()
+                    )
+                    val drawResource =
+                        if (response.bank == Banks.VTB) R.drawable.vtbmark else R.drawable.sbermark
+                    val placemark = pointCollection.addPlacemark(
+                        point,
+                        ImageProvider.fromResource(requireContext(), drawResource)
+                    )
+                    placemark.userData = it
+                }
             }
         }
     }
@@ -247,7 +250,7 @@ class FragmentSelectPartition : BaseFragment(), MapObjectTapListener {
             "!!!",
             "onMapObjectTap: ${(p0.userData as Partitions).properties.companyMetaData.hourse.text}"
         )
-        (p0.userData as Partitions).properties.let{
+        (p0.userData as Partitions).properties.let {
             viewModel.saveSelectPartition(p0.userData as Partitions)
             binding.layoutPartition.tvAddress.text = it.companyMetaData.address
             binding.layoutPartition.tvHours.text = it.companyMetaData.hourse.text

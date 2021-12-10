@@ -6,4 +6,5 @@ import io.reactivex.Single
 
 interface IYandexPartitionsRepositories {
     fun getVtbPartitions(bbox: Bbox): Single<YandexResponse>
+    fun getSberPartitions(bbox: Bbox): Single<YandexResponse>
 }

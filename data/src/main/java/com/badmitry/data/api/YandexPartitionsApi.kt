@@ -11,4 +11,9 @@ interface YandexPartitionsApi {
     fun getVtbPartitions(
         @Query("bbox") bbox: String
     ): Single<YandexResponse>
+
+    @GET("/v1/?text=отделения Сбербанка&results=500&rspn=1&type=biz&lang=ru_RU&apikey=df130958-bdfb-486d-be97-4a0e9eb8ee97")
+    fun getSberPartitions(
+        @Query("bbox") bbox: String
+    ): Single<YandexResponse>
 }

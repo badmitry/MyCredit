@@ -30,7 +30,7 @@ class FragmentSelectPartitionViewModel @Inject constructor(
         yandexPartitionsInteractor(params, ::onSubscribe, ::onFinally, ::onGetPartitions, ::onError)
     }
 
-    private fun onGetPartitions(partitions: YandexResponse) {
+    private fun onGetPartitions(partitions: List<YandexResponse>) {
         yandexResponseLiveData.value = partitions
     }
 
@@ -46,7 +46,7 @@ class FragmentSelectPartitionViewModel @Inject constructor(
         DataSaver.instance.partitions = partitions
     }
 
-    val yandexResponseLiveData = MutableLiveData<YandexResponse>()
+    val yandexResponseLiveData = MutableLiveData<List<YandexResponse>>()
     val currentPositionLiveData = MutableLiveData<CameraPosition>()
     val currentLocationLiveData = MutableLiveData<Location>()
 }
