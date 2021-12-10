@@ -15,11 +15,12 @@ import com.badmitry.vtbhackaton.R
 import com.badmitry.vtbhackaton.databinding.FragmentMainBinding
 import com.badmitry.vtbhackaton.navigation.Screens
 import com.badmitry.vtbhackaton.rvadapters.ApplicationRVAdapter
+import com.badmitry.vtbhackaton.view.OnApplicationDeleteView
 import com.badmitry.vtbhackaton.viewmodules.FragmentMainViewModel
 import javax.inject.Inject
 
 
-class FragmentMain : BaseFragment() {
+class FragmentMain : BaseFragment(), OnApplicationDeleteView {
 
     private val AUTH_DATA = "AuthData"
     private lateinit var binding: FragmentMainBinding
@@ -73,7 +74,7 @@ class FragmentMain : BaseFragment() {
     }
 
     private fun initAdapter() {
-        adapter = ApplicationRVAdapter(requireContext())
+        adapter = ApplicationRVAdapter(requireContext(), this)
         binding.rvApplications.layoutManager = LinearLayoutManager(requireContext())
         binding.rvApplications.adapter = adapter
     }
@@ -96,5 +97,9 @@ class FragmentMain : BaseFragment() {
                 }
             }
         }
+    }
+
+    override fun deleteApplicationId(applicationId: String) {
+        viewModel.deleteApplication(applicationId)
     }
 }

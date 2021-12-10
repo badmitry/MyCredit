@@ -36,6 +36,16 @@ class FragmentMainViewModel @Inject constructor(
             }
     }
 
+    fun deleteApplication(applicationId: String) {
+        dbRepositories.deleteByApplicationId(applicationId).subscribeOn(scheduler).observeOn(postScheduler)
+            .doOnComplete{
+                getApplicationId()
+            }.doOnError{
+                onError(it)
+            }
+            .subscribe ()
+    }
+
     private fun onSuccess(list: List<VtbApplicationId>) {
         Log.e("!!!", "onSuccess: ${list.size}")
         applicationIdLiveData.value = list

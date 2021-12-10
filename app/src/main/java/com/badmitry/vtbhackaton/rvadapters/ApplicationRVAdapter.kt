@@ -7,9 +7,11 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.badmitry.domain.entities.vtbcreditrequest.VtbApplicationId
 import com.badmitry.vtbhackaton.databinding.RvItemApplicationsBinding
+import com.badmitry.vtbhackaton.view.OnApplicationDeleteView
 
 class ApplicationRVAdapter(
-    private val context: Context
+    private val context: Context,
+    private val onApplicationDeleteView: OnApplicationDeleteView
 ) :
     RecyclerView.Adapter<ApplicationRVAdapter.ViewHolder>() {
     private lateinit var adapterBinding: RvItemApplicationsBinding
@@ -26,6 +28,9 @@ class ApplicationRVAdapter(
         @SuppressLint("NotifyDataSetChanged")
         fun bind(application: VtbApplicationId) {
             binding.applicationId.text = application.applicationId
+            binding.btnDelete.setOnClickListener{
+                onApplicationDeleteView.deleteApplicationId(application.applicationId)
+            }
         }
     }
 

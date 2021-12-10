@@ -35,4 +35,6 @@
     <string name="department_doc">Кем выдан</string>
     <string name="credit_sum">Сумма кредита</string>
     <string name="credit_period">Период кредита (в месяцах)</string>
+    <string name="approved">Одобрено</string>
+    <string name="in_progress">На рассмотрении</string>
 </resources>

@@ -15,9 +15,14 @@ class DbRepositories : ISaverRepositories {
 
     override fun getApplicationId(): Single<List<VtbApplicationId>> {
         return AppDatabase.getInstance().dao()
-            .select().map{
+            .select().map {
                 ApplicationMapper.getApplicationIdFromDb(it)
             }
+    }
+
+    override fun deleteByApplicationId(applicationId: String): Completable {
+        return AppDatabase.getInstance().dao()
+            .deleteByApplicationId(applicationId)
     }
 
 }

@@ -16,6 +16,6 @@ interface Dao {
     @Query("SELECT * FROM application")
     fun select(): Single<List<ApplicationIdEntity>>
 
-    @Query("DELETE FROM application")
-    fun clear(): Completable
+    @Query("DELETE FROM application WHERE applicationId = :applicationId")
+    fun deleteByApplicationId(applicationId: String): Completable
 }

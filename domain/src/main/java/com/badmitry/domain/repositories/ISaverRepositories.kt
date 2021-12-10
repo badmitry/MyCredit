@@ -7,4 +7,5 @@ import io.reactivex.Single
 interface ISaverRepositories {
     fun saveApplicationId(applicationId: VtbApplicationId): Completable
     fun getApplicationId(): Single<List<VtbApplicationId>>
+    fun deleteByApplicationId(applicationId: String): Completable
 }
