@@ -10,8 +10,8 @@ import io.reactivex.Single
 @Dao
 interface Dao {
 
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
-    fun insertIgnore(item: ApplicationIdEntity): Completable
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insertReplace(item: ApplicationIdEntity): Completable
 
     @Query("SELECT * FROM application")
     fun select(): Single<List<ApplicationIdEntity>>

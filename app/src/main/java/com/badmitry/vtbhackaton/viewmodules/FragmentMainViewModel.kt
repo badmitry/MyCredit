@@ -27,6 +27,7 @@ class FragmentMainViewModel @Inject constructor(
     }
 
     val liveData = MutableLiveData<AuthData>()
+    var applicationIdLiveData = MutableLiveData<List<VtbApplicationId>>()
 
     fun getApplicationId() {
         dbRepositories.getApplicationId().subscribeOn(scheduler).observeOn(postScheduler)
@@ -37,6 +38,7 @@ class FragmentMainViewModel @Inject constructor(
 
     private fun onSuccess(list: List<VtbApplicationId>) {
         Log.e("!!!", "onSuccess: ${list.size}")
+        applicationIdLiveData.value = list
     }
 
     fun setAuthData(authData: AuthData) {

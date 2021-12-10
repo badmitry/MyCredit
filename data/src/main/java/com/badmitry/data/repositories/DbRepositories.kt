@@ -10,7 +10,7 @@ import io.reactivex.Single
 class DbRepositories : ISaverRepositories {
     override fun saveApplicationId(applicationId: VtbApplicationId): Completable {
         return AppDatabase.getInstance().dao()
-            .insertIgnore(ApplicationMapper.getApplicationDbFromResponse(applicationId))
+            .insertReplace(ApplicationMapper.getApplicationDbFromResponse(applicationId))
     }
 
     override fun getApplicationId(): Single<List<VtbApplicationId>> {
