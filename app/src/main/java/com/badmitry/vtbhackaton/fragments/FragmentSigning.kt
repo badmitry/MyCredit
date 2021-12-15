@@ -20,6 +20,9 @@ class FragmentSigning : BaseFragment() {
     private lateinit var viewModel: FragmentSigningViewModel
     private val CODE_PERMISSION_LOCATION = 1100
 
+    private val testLogin = "team21@app.hackaton.bankingapi.ru"
+    private val testPassword = "jGW2R1Gi"
+
     @Inject
     lateinit var vmFactory: ViewModelProvider.Factory
 
@@ -59,6 +62,10 @@ class FragmentSigning : BaseFragment() {
                 binding.etLogin.text.toString(),
                 binding.etPassword.text.toString()
             )
+        }
+        binding.btnTestAccount.setOnClickListener {
+            binding.etLogin.setText(testLogin)
+            binding.etPassword.setText(testPassword)
         }
     }
 
